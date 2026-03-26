@@ -34,9 +34,14 @@ services:
       - internalnetwork
     ports:
       - 5432:5432
-#    volumes:
-#      - db_data:/var/lib/postgresql/data
+    volumes:
+      # To use volumes I need to declare them first (on line 43)
+      - db_data:/var/lib/postgresql/data
+      # But I can link a local directory to the container without declaring it first
+      - ./init_db:/docker-entrypoint-initdb.d
 
+volumes:
+  db_data:
 
 networks:
   internalnetwork:
