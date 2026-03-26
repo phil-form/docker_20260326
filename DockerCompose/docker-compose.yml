@@ -1,0 +1,43 @@
+services:
+  front:
+    image: node:22
+    command: sh -c "npm install && npm start"
+    ports:
+      - 1980:1980
+    working_dir: /front
+    volumes:
+        - ./:/front
+
+  frontbuild:
+    build:
+      context: .
+      dockerfile: front.Dockerfile
+    command: sh -c "npm install && npm start"
+    ports:
+      - 1981:1980
+    working_dir: /front
+
+  back:
+    image: nginx
+    ports:
+      - 80:80
+    networks:
+      - internalnetwork
+
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    networks:
+      - internalnetwork
+    ports:
+      - 5432:5432
+#    volumes:
+#      - db_data:/var/lib/postgresql/data
+
+
+networks:
+  internalnetwork:
+    driver: bridge
