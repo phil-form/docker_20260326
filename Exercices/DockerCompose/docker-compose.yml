@@ -1,0 +1,9 @@
+services:
+  front:
+    image: node:24
+    working_dir: /front
+    command: sh -c "npm install && npm start"
+    volumes:
+      - ./front:/front
+    ports:
+      - "1980:1980"
