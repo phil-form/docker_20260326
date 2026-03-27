@@ -7,3 +7,43 @@ services:
       - ./front:/front
     ports:
       - "1980:1980"
+
+  back:
+    image: node:22
+    working_dir: /back
+    command: sh -c "npm install && npm start"
+    volumes:
+      - ./backend:/back
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=test
+      - DB_PASSWORD=test
+      - DB_NAME=testdb
+    networks:
+      - internal-network
+  
+  db:
+    image: postgres:18
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=test
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=testdb
+    networks:
+      - internal-network
+    volumes:
+      - db-data:/var/lib/postgresql/
+      - ./backend/init_db:/init_db
+
+networks:
+  internal-network:
+
+volumes:
+  db-data:
