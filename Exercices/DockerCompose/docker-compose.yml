@@ -1,6 +1,6 @@
 services:
   front:
-    image: node:24
+    image: node:22
     working_dir: /front
     command: sh -c "npm install && npm start"
     volumes:
